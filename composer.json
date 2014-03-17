@@ -1,0 +1,24 @@
+{
+    "name": "Graphite-Alert",
+    "description": "Script for polling graphite and alerting",
+    "authors": [
+        {
+            "name": "Joshua Eichorn",
+            "email": "josh@bluga.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "GraphiteAlert\\": "src/GraphiteAlert",
+            "PagerDuty\\": "src/PagerDuty"
+        }
+    },
+    "require": {
+        "guzzle/guzzle": "~3.7",
+        "symfony/console": "~2.3",
+        "eoghanobrien/php-simple-mail": "dev-master"
+    },
+    "config": {
+        "bin-dir": "bin/"
+    }
+}

@@ -1,0 +1,12 @@
+#!/usr/bin/php
+<?php
+require_once __DIR__.'/vendor/autoload.php';
+
+date_default_timezone_set('UTC');
+
+use Symfony\Component\Console\Application;
+use GraphiteAlert\MonitorCommand;
+
+$application = new Application();
+$application->add(new MonitorCommand());
+$application->run();
