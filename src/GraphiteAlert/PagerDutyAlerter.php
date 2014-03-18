@@ -17,7 +17,7 @@ class PagerDutyAlerter
         if ($this->options === false)
             return;
         $this->api->trigger($key, str_replace(
-            array_keys($args),
+            array_map(function ($i) { return '{'.$i.'}'; }, array_keys($args)),
             array_values($args),
             $this->options['description']
         ));
@@ -28,7 +28,7 @@ class PagerDutyAlerter
         if ($this->options === false)
             return;
         $this->api->resolve($key, str_replace(
-            array_map(function ($i) { return "{$i}"; }, array_keys($args)),
+            array_map(function ($i) { return '{'.$i.'}'; }, array_keys($args)),
             array_values($args),
             $this->options['description']
         ));
