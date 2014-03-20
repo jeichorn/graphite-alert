@@ -77,16 +77,33 @@ class GraphiteMonitor
             if ($alert > 2)
             {
                 $args['times'] = $alert;
-                $this->alerter['alert']->trigger($metric, $args);
-                $this->info("$metric at alert level $args[value]");
-                $this->mark('alert', $metric);
+                // if we already have an outstanding alert don't send a duplicate
+                if (isset($this->db[$metric]) && $this->db[$metric] == 'alert')
+                {
+                    $this->info("$metric still above alert level $args[value]");
+                }
+                else
+                {
+                    $this->alerter['alert']->trigger($metric, $args);
+                    $this->info("$metric at alert level $args[value]");
+                    $this->mark('alert', $metric);
+                }
             }
             elseif ($warn > 2)
             {
                 $args['times'] = $warn;
-                $this->alerter['warn']->trigger($metric, $args);
-                $this->info("$metric at warn level $args[value]");
-                $this->mark('warn', $metric);
+
+                // if we have an outstanding alert, or warn don't duplicate
+                if (!empty($this->db[$metric]))
+                {
+                    $this->info("$metric still above warn level $args[value]");
+                }
+                else
+                {
+                    $this->alerter['warn']->trigger($metric, $args);
+                    $this->info("$metric at warn level $args[value]");
+                    $this->mark('warn', $metric);
+                }
             }
             else
             {
