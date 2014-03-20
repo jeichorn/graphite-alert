@@ -10,6 +10,7 @@ class GraphiteMonitor
     protected $metrics;
     protected $options;
     protected $lookback = 10;
+    protected $threshold = 2;
     protected $output;
     protected $alerter;
     protected $graphite;
@@ -22,6 +23,9 @@ class GraphiteMonitor
         $this->metrics = $metrics;
         $this->graphite = $graphite;
         $this->options = $options;
+
+        $this->lookback = $options['lookback'];
+        $this->threshold = $options['threshold'];
 
         if (file_exists('/tmp/graphite_alert.db'))
             $this->db = unserialize(file_get_contents('/tmp/graphite_alert.db'));
@@ -74,7 +78,7 @@ class GraphiteMonitor
                 'url'   => $url
                 ];
 
-            if ($alert > 2)
+            if ($alert > $this->threshold)
             {
                 $args['times'] = $alert;
                 // if we already have an outstanding alert don't send a duplicate
@@ -89,7 +93,7 @@ class GraphiteMonitor
                     $this->mark('alert', $metric);
                 }
             }
-            elseif ($warn > 2)
+            elseif ($warn > $this->threshold)
             {
                 $args['times'] = $warn;
 

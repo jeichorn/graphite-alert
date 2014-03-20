@@ -41,6 +41,8 @@ class MonitorCommand extends Command
         ];
 
         $options['graphite_url'] = $config['graphite']['url'];
+        $options['threshold'] = $config['threshold'];
+        $options['lookback'] = $config['lookback'];
 
         $metrics = $this->processTemplates($config['metrics']);
 
