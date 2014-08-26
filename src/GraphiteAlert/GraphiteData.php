@@ -28,7 +28,13 @@ class GraphiteData
         $r = $request->send();
         $data = $r->json();
 
-        return $this->reformat($data);
+        try {
+            return $this->reformat($data);
+        }
+        catch(\Exception $e)
+        {
+            throw new \Exception("Unable to reformat $target", 0, $e);
+        }
     }
 
     protected function reformat($data)
